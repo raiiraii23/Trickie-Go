@@ -98,9 +98,49 @@ $(document).ready(function() {
                   }
                   });
               });
-              
-
   });
+
+  $('#update-profile-form').submit(function(event) {
+    event.preventDefault();
+    var formData = $(this).serialize();
+    // console.log(formData);
+    $.ajax({
+    type: 'POST',
+    url: 'prof-update.php',
+    data: formData,
+    success: function(response) {
+        if (response == 'success') {
+        Swal.fire({
+            title: 'Success!',
+            text: 'Data Update successfully',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.reload();
+            }
+        });
+        } else {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Error',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        });
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        Swal.fire({
+        title: 'Error!',
+        text: 'Operation failed',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+        });
+    }
+    });
+
+});
+
 
  
 

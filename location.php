@@ -80,9 +80,7 @@
                                       <li class="nav-item">
                                         <a class="nav-link text-dark" href="available.php">Available Driver</a>
                                       </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link text-dark" href="message.php">Message</a>
-                                      </li>
+                                      
                                       <li class="nav-item">
                                         <a class="nav-link text-dark" href="history.php">History</a>
                                       </li>
@@ -112,9 +110,7 @@
                                     <li class="nav-item">
                                       <a class="nav-link text-dark" href="available.php">Reservation</a>
                                     </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link text-dark" href="message.php">Message</a>
-                                    </li>
+                                    
                                     <li class="nav-item">
                                       <a class="nav-link text-dark" href="history.php">History</a>
                                     </li>
@@ -148,7 +144,7 @@
                 <button class="button-header" disabled>Location</button>
             </div>
 
-        <div class="container h-50 d-flex text-center align-items-center">
+        <div class="container h-50 d-flex text-center align-items-center my-5 py-5">
             <div class="container">
                 <!-- content -->
                 

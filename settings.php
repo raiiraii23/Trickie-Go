@@ -4,6 +4,8 @@
 		header('location: index.php');
 	}
   require_once "conn.php";
+
+  $id = $_SESSION['user_id'];
   
 ?>
 <!DOCTYPE html>
@@ -56,9 +58,7 @@
                                       <li class="nav-item">
                                         <a class="nav-link text-dark" href="available.php">Available Driver</a>
                                       </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link text-dark" href="message.php">Message</a>
-                                      </li>
+                                      
                                       <li class="nav-item">
                                         <a class="nav-link text-dark" href="history.php">History</a>
                                       </li>
@@ -88,9 +88,7 @@
                                     <li class="nav-item">
                                       <a class="nav-link text-dark" href="available.php">Reservation</a>
                                     </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link text-dark" href="message.php">Message</a>
-                                    </li>
+                                    
                                     <li class="nav-item">
                                       <a class="nav-link text-dark" href="history.php">History</a>
                                     </li>
@@ -123,7 +121,7 @@
         <button class="button-header" disabled>Settings</button>
     </div>
 
-    <div class="container h-50 d-flex text-center align-items-center">
+    <div class="container h-50 d-flex text-center align-items-center my-5 py-5">
         <div class="container">
         <?php
               if ($role == "driver") {
@@ -201,7 +199,7 @@
               }
               if ($role == "passenger" ) {
                   ?>
-                  <form id="update-destination-form" method="POST">
+                  <form id="update-profile-form" method="POST">
 
                   <div class="form-group my-2">
                       <div class="input-group">
@@ -235,29 +233,23 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                           </div>
                           <div class="modal-body">
-                            <form id="" method="POST">
-                              <div class="form-group my-2">
-                                <div class="input-group">
-                                  <span class="input-group-addon mx-2 my-2"><i class="fa fa-map"></i></span>
-                                  <select class="form-select" name="destination" aria-label="Select Role">
-                                    <option value="woodhouse" <?php echo (isset($destination) === 'woodhouse') ? 'selected' : ''; ?> >Wood House</option>
-                                    <option value="Block 1" <?php echo (isset($destination) === 'Block 1') ? 'selected' : ''; ?> >Block 1</option>
-                                    <option value="Block 2" <?php echo (isset($destination) === 'Block 2') ? 'selected' : ''; ?> >Block 2</option>
-                                    <option value="Block 3" <?php echo (isset($destination) === 'Block 3') ? 'selected' : ''; ?> >Block 3</option>
-                                    <option value="Block 4" <?php echo (isset($destination) === 'Block 4') ? 'selected' : ''; ?> >Block 4</option>
                               
+                              <div class="form-group my-2 ">
+                                <div class="input-group">
+                                  <span class="input-group-addon mx-2"><i class="fa fa-users"></i></span>
+                                  <input type="text" class="form-control passenger-count" name="name" min="1" max="5" value="<?= !empty($name) ? $name : '' ?>" required="required" autocomplete="on">
                                 </div>
                               </div>
                               <div class="form-group my-2 ">
                                 <div class="input-group">
                                   <span class="input-group-addon mx-2"><i class="fa fa-users"></i></span>
-                                  <input type="number" class="form-control passenger-count" name="passenger-count" min="1" max="5" placeholder="<?= $count_passenger ?>" required="required" autocomplete="on">
+                                  <input type="text" class="form-control passenger-count" name="username" min="1" max="5" value="<?= !empty($username) ? $username : '' ?>" required="required" autocomplete="on">
                                 </div>
                               </div>
                               
                             <input type="text" class="btn btn-primary" name="uuid" value="<?= $_SESSION['user_id']?>" hidden>
                             <input type="text" class="btn btn-primary" name="role" value="passenger" hidden>
-                            <input type="text" class="btn btn-primary" name="page" value="destination" hidden>
+                            <input type="text" class="btn btn-primary" name="page" value="settings" hidden>
 
                                 
                           </div>

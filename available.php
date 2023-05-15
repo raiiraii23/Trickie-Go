@@ -144,7 +144,17 @@
       <hr>
 
       <div class="scrollable-div">
-
+      <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Driver Name:</th>
+          <th scope="col">Activity</th>
+          <th scope="col">Book</th>
+        </tr>
+      </thead>
+      <tbody>
+      
         <?php
               if ($role == "passenger") {
                 ?>
@@ -158,26 +168,22 @@
                   $d_time = time_elapsed_string($row['timestamp']);
                   ?>
         <div class="d-flex justify-content-around">
-          <strong>Driver Name:
-            <?= $d_name ?>
-          </strong>
-          <strong>id:
-            <?= $d_id ?>
-          </strong>
-          <strong>
-            <?= $d_time?>
-          </strong>
-
+    <tr>
+    <td><?= $d_id ?></td>
+      <td><?= $d_name ?></td>
+      <td><?= $d_time?></td>
+        <td>
           <form id="book-form" class="form-submit" method="POST">
             <input type="text" class="form-control" name="user-id" value="<?= $id ?>" hidden>
             <input type="text" class="form-control" name="name" value="<?= $d_name ?>" hidden>
             <input type="text" class="form-control" name="driver-id" value="<?= $d_id ?>" hidden>
-            <input type="submit" class="btn btn-success" value="<?php echo ($book == $id) ? 'booked' : 'book'; ?>" <?php echo($book == $id)  ? 'disabled' : ''; ?>>
-            <a href="book.php?id=<?= $id ?>"> CANCEL </a>
+            <input type="text" class="form-control" name="action" value="book" hidden>
+            <input type="submit" class="btn btn-success" value="<?php echo ($book == $id) ? 'booked' : 'book'; ?>" <?php echo($book == $id)  ? 'hidden' : ''; ?>>
+            <a  <?php echo($book != $id)  ? 'hidden' : ''; ?> href="book.php?action=cancel&id=<?= $d_id ?>"> CANCEL </a>
           </form>
-
+          </td>
+    </tr>
         </div>
-        <hr>
 
         <?php
         }
@@ -186,6 +192,9 @@
         }
         }
       ?>
+          </tbody>
+        </table>  
+
 
       </div>
     </div>
@@ -210,7 +219,7 @@
           url: 'book.php',
           data: formData,
           success: function (res) {
-            console.log(res);
+            // console.log(response);
             if (res == 'success') {
               Swal.fire({
                 title: 'Success!',

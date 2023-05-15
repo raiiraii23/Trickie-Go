@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    if(ISSET($_SESSION['user_id'])){
+        header('location: home.php');
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
