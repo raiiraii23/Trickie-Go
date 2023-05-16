@@ -173,12 +173,7 @@
             <input type="text" class="form-control" name="name" value="<?= $d_name ?>" hidden>
             <input type="text" class="form-control" name="driver-id" value="<?= $d_id ?>" hidden>
             <input type="submit" class="btn btn-success" value="<?php echo ($book == $id) ? 'booked' : 'book'; ?>" <?php echo($book == $id)  ? 'disabled' : ''; ?>>
-            <?php
-              if ($book == $id ) { ?>
-                <input type="submit" class="btn btn-danger" value="Cancel">
-              <?php
-              }
-            ?>
+            <a href="book.php?id=<?= $id ?>"> CANCEL </a>
           </form>
 
         </div>
@@ -209,14 +204,14 @@
         var formData = $(this).serialize();
         var params = new URLSearchParams(formData);
         var name = params.get('name');
-        console.log(name);
+
         $.ajax({
           type: 'POST',
           url: 'book.php',
           data: formData,
           success: function (res) {
             console.log(res);
-            if (response == 'success') {
+            if (res == 'success') {
               Swal.fire({
                 title: 'Success!',
                 text: 'successfully Booked Driver '+ name ,
@@ -230,7 +225,7 @@
             } else {
               Swal.fire({
                 title: 'Error!',
-                text: 'Incorrect Password!',
+                text: 'You cant book more than 1 !',
                 icon: 'error',
                 confirmButtonText: 'Ok'
               });

@@ -1,5 +1,6 @@
 <?php 
 // need tong include para matawag yung file 
+//login html front end
 include '..\login.php'; 
 ?>
 <!DOCTYPE html>
