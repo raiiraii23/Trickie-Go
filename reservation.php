@@ -4,7 +4,18 @@
 		header('location: index.php');
 	}
   require_once "conn.php";
-  
+
+  $query = "SELECT booked_by FROM users WHERE user_id = $id";
+
+  $result = mysqli_query($conn, $query);
+
+  if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $bookedBy = $row['booked_by'];
+  } else {
+    echo "Error executing the query: " . mysqli_error($conn);
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +95,7 @@
                                       <a class="nav-link active text-dark" href="home.php">Dashboard</a>
                                     </li>
                                     <li class="nav-item">
-                                      <a class="nav-link text-dark" href="available.php">Reservation</a>
+                                      <a class="nav-link text-dark" href="reservation.php">Reservation</a>
                                     </li>
                                     
                                     <li class="nav-item">
@@ -120,20 +131,212 @@
                 <button class="button-header" disabled>Reservation</button>
             </div>
 
-        <div class="container h-50 d-flex text-center align-items-center my-5 py-5">
-            <div class="container">
-                <!-- content -->
-                <i class='fa fa-user-circle' style='font-size:100px'></i>
-                <h1 class="bristol text-uppercase">Reservation</h1>
-                <h1 class="text-capitalize"> <?= $role ?> <?= $name ?></h1>
-            </div>
-        </div>
 
-        <div class="footer container text-center fixed-bottom">
-            <small class="text-white"> We need permission for the service you use <a href="#" class="text-white">Learn More</a> </p> </small>
-        </div>
+            <div class="container d-flex text-center align-items-center">
+    <div class="container">
+      <hr>
 
-    <script src="assets/js/query.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+      <div class="scrollable-div">
+      <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Passenger Name</th>
+          <th scope="col">location</th>
+          <th scope="col">Destination</th>
+          <th scope="col">Passenger count</th>
+          <th scope="col">Reserve</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+            $id = $_SESSION['user_id'];
+            var_dump($id); 
+            $sql = "SELECT * FROM users INNER JOIN directions ON directions.id = users.user_id WHERE booked_by = $bookedBy";
+            $result = mysqli_query($conn, $sql);
+           if (mysqli_num_rows($result) > 0) {
+           while ($row = mysqli_fetch_assoc($result)) {
+          ?>
+        <div class="d-flex justify-content-around">
+        <tr>
+          <td scope="col"><?= $row['user_id']?></td>
+          <td scope="col"><?= $row['name']?></td>
+          <td scope="col"><?= $row['locations']?></td>
+          <td scope="col"><?= $row['destination']?></td>
+          <td scope="col"><?= $row['passenger']?></td>
+          <td scope="col">
+
+            <?php
+              if ($row['status'] == 'accept') { ?>
+                <button type="button" name="done" data-id="<?= $row['user_id']?>" class="done btn btn-success" value="done">Done</button>
+                <button type="button" name="cancel" data-id="<?= $row['user_id']?>" class="cancel btn btn-danger" value="cancel">Cancel</button>
+                <?php
+              } else { ?>
+                <button type="button" name="accept" data-id="<?= $row['user_id']?>" class="accept btn btn-success" value="accept">Accept</button>
+                <?php
+              }
+              
+            ?>
+        </td>
+        </tr>
+      <?php }} ?>
+          </tbody>
+        </table>  
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="footer container text-center fixed-bottom">
+    <small class="text-white"> We need permission for the service you use <a href="#" class="text-white">Learn More</a>
+      </p> </small>
+  </div>
+
+
+  <script>
+    $(document).ready(function () {
+      $('.done').click(function (e) {
+        e.preventDefault();
+        var action = $(this).val();
+        var id = $(this).data("id");
+        var data = { 'action': action ,'id': id };
+
+        $.ajax({
+          type: 'POST',
+          url: 'reserve.php',
+          data: data, 
+          success: function (res) {
+            console.log(res);
+            if (res == 'success') {
+              Swal.fire({
+                title: 'Success!',
+                text: 'Successfully Done Booking',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              });
+            } else {
+              Swal.fire({
+                title: 'Error!',
+                text: 'You cant done this booking!',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Operation failed',
+              icon: 'error',
+              confirmButtonText: 'Ok'
+            });
+
+          }
+        });
+
+      });
+
+      $('.cancel').click(function (e) {
+        e.preventDefault();
+        var action = $(this).val();
+        var id = $(this).data("id");
+        var data = { 'action': action ,'id': id };
+
+
+        $.ajax({
+          type: 'POST',
+          url: 'reserve.php',
+          data: data, 
+          success: function (res) {
+            console.log(action);
+            if (res == 'success') {
+              Swal.fire({
+                title: 'Success!',
+                text: 'Successfully Cancel Booking',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              });
+            } else {
+              Swal.fire({
+                title: 'Error!',
+                text: 'You cant cancel booking!',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Operation failed',
+              icon: 'error',
+              confirmButtonText: 'Ok'
+            });
+
+          }
+        });
+
+      });
+
+      $('.accept').click(function (e) {
+        e.preventDefault();
+        var action = $(this).val();
+        var id = $(this).data("id");
+        var data = { 'action': action ,'id': id };
+
+        $.ajax({
+          type: 'POST',
+          url: 'reserve.php',
+          data: data, 
+          success: function (res) {
+            console.log(res);
+            if (res == 'success') {
+              Swal.fire({
+                title: 'Success!',
+                text: 'Successfully Accept Booking',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              });
+            } else {
+              Swal.fire({
+                title: 'Error!',
+                text: 'You cant accept more than 1!',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+              });
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Operation failed',
+              icon: 'error',
+              confirmButtonText: 'Ok'
+            });
+
+          }
+        });
+
+      });
+    });
+  </script>
+  <script src="assets/js/query.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

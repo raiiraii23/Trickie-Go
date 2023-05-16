@@ -76,5 +76,6 @@
     if(!ISSET($_SESSION['role'])){
 		header('location: available.php');
 	}
+    
 
 ?>

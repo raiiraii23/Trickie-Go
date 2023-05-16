@@ -106,7 +106,7 @@
                                       <a class="nav-link active text-dark" href="home.php">Dashboard</a>
                                     </li>
                                     <li class="nav-item">
-                                      <a class="nav-link text-dark" href="available.php">Reservation</a>
+                                      <a class="nav-link text-dark" href="reservation.php">Reservation</a>
                                     </li>
                                     
                                     <li class="nav-item">

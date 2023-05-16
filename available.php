@@ -3,6 +3,9 @@
 	if(!ISSET($_SESSION['user_id'])){
 		header('location: index.php');
 	}
+  if($_SESSION['role'] == 'driver' ){
+		header('location: reservation.php');
+	}
   require_once "conn.php";
 
   require_once "user-session.php";
@@ -100,7 +103,7 @@
                 <a class="nav-link active text-dark" href="home.php">Dashboard</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-dark" href="available.php">Reservation</a>
+                <a class="nav-link text-dark" href="reservation.php">Reservation</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-dark" href="message.php">Message</a>
@@ -135,7 +138,7 @@
 
   <div class="container page-title text-center">
     <button class="button-header" disabled>
-      <?php echo ($role == 'driver') ? 'reservation' : 'Available Driver'; ?>
+      Available Driver
     </button>
   </div>
 
@@ -179,7 +182,19 @@
             <input type="text" class="form-control" name="driver-id" value="<?= $d_id ?>" hidden>
             <input type="text" class="form-control" name="action" value="book" hidden>
             <input type="submit" class="btn btn-success" value="<?php echo ($book == $id) ? 'booked' : 'book'; ?>" <?php echo($book == $id)  ? 'hidden' : ''; ?>>
-            <a  <?php echo($book != $id)  ? 'hidden' : ''; ?> href="book.php?action=cancel&id=<?= $d_id ?>"> CANCEL </a>
+            <?php
+              if ($row['status'] == 'accept') {
+                ?>
+                  <a  <?php echo($book != $id)  ? 'hidden' : ''; ?> class="btn btn-info" href="book.php?action=cancel&id=<?= $d_id ?>"> On Going </a>
+                <?php
+              } else {
+                ?>
+                  <a  <?php echo($book != $id)  ? 'hidden' : ''; ?> class="btn btn-danger" href="book.php?action=cancel&id=<?= $d_id ?>"> Cancel </a>
+                <?php
+              }
+              
+            ?>
+            
           </form>
           </td>
     </tr>
