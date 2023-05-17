@@ -14,6 +14,7 @@
 			$_SESSION['user_id'] = $fetch['user_id'];
 			$_SESSION['role'] = $fetch['role'];
 			$_SESSION['name'] = $fetch['name'];
+			$_SESSION['booked_by'] = $fetch['booked_by'];
 			echo 'success';
 		}else{
 			echo 'error';

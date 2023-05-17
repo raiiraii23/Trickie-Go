@@ -151,8 +151,7 @@
       <tbody>
         <?php
             $id = $_SESSION['user_id'];
-            var_dump($id); 
-            $sql = "SELECT * FROM users INNER JOIN directions ON directions.id = users.user_id WHERE booked_by = $bookedBy";
+            $sql = "SELECT * FROM users INNER JOIN directions ON directions.id = users.user_id WHERE user_id = '$bookedBy'";
             $result = mysqli_query($conn, $sql);
            if (mysqli_num_rows($result) > 0) {
            while ($row = mysqli_fetch_assoc($result)) {
@@ -253,12 +252,11 @@
           url: 'reserve.php',
           data: data, 
           success: function (res) {
-            console.log(action);
             if (res == 'success') {
               Swal.fire({
-                title: 'Success!',
+                title: 'Caceled!',
                 text: 'Successfully Cancel Booking',
-                icon: 'success',
+                icon: 'error',
                 confirmButtonText: 'Ok'
               }).then((result) => {
                 if (result.isConfirmed) {

@@ -81,7 +81,9 @@ $(document).ready(function() {
                 url: '../register.php',
                 data: formData,
                 success: function(response) {
+                console.log(response);
                     if (response == 'success') {
+
                     Swal.fire({
                         title: 'Success!',
                         text: 'Data inserted successfully',

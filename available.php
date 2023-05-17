@@ -10,9 +10,16 @@
 
   require_once "user-session.php";
 
-  $id = $_SESSION['user_id'];
+  $me = $_SESSION['user_id'];
   $name = $_SESSION['name'];
-  // var_dump($_SESSION);
+  $booking = "SELECT * FROM users WHERE user_id = '$me'";
+  $test = mysqli_query($conn, $booking);
+  if (mysqli_num_rows($test) > 0) {
+    while ($row = mysqli_fetch_assoc($test)) {
+      $booked_by = $row['booked_by'];
+    }
+  }
+  var_dump($me);
 
 ?>
 <!DOCTYPE html>
@@ -177,22 +184,22 @@
       <td><?= $d_time?></td>
         <td>
           <form id="book-form" class="form-submit" method="POST">
-            <input type="text" class="form-control" name="user-id" value="<?= $id ?>" hidden>
+            <input type="text" class="form-control" name="user-id" value="<?= $me ?>" hidden>
             <input type="text" class="form-control" name="name" value="<?= $d_name ?>" hidden>
             <input type="text" class="form-control" name="driver-id" value="<?= $d_id ?>" hidden>
             <input type="text" class="form-control" name="action" value="book" hidden>
-            <input type="submit" class="btn btn-success" value="<?php echo ($book == $id) ? 'booked' : 'book'; ?>" <?php echo($book == $id)  ? 'hidden' : ''; ?>>
+            <input type="submit" class="btn btn-success" value="<?php echo ($book == $me) ? 'booked' : 'book'; ?>" <?php echo($book == $me)  ? 'hidden' : ''; ?>>
             <?php
-              if ($row['status'] == 'accept') {
+                 
+              if ($booked_by == $me) {
                 ?>
-                  <a  <?php echo($book != $id)  ? 'hidden' : ''; ?> class="btn btn-info" href="book.php?action=cancel&id=<?= $d_id ?>"> On Going </a>
-                <?php
-              } else {
+                <a  class="btn btn-warning disabled"> On Going </a>
+              <?php
+              } else{
                 ?>
-                  <a  <?php echo($book != $id)  ? 'hidden' : ''; ?> class="btn btn-danger" href="book.php?action=cancel&id=<?= $d_id ?>"> Cancel </a>
-                <?php
+                <a  class="btn btn-danger disabled"> Canceled </a>
+              <?php
               }
-              
             ?>
             
           </form>

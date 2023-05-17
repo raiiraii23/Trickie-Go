@@ -9,29 +9,17 @@
 
 		$sql = "SELECT * FROM users WHERE username = '$username'";
 		$result = mysqli_query($conn, $sql);
-		// if (mysqli_num_rows($result) > 0) {
-		// 	echo 'error';
-		// } else {
-		// 	$register = mysqli_query($conn, "INSERT INTO `users` VALUES('', '$name', '$role', '$username', '$password',NOW()), '0'") or die(mysqli_error());
-		// 	if ($register) {
-		// 		echo "success";
-		// 	}else{
-		// 		echo 'error';
-		// 	}
-		// }
-
-		if (mysqli_num_rows($result) > 0) {
-			var_dump(mysqli_num_rows($result));
-
-		} else {
-			// var_dump(mysqli_num_rows($result));
-			$register = mysqli_query($conn, "INSERT INTO `users` VALUES('', '$name', '$role', '$username', '$password', NOW(), '0')") or die(mysqli_error($conn));
+		
+		if (mysqli_num_rows($result) == 0) {
+			$register = mysqli_query($conn, "INSERT INTO `users` VALUES('', '$name', '$role', '$username', '$password', NOW(), '0','')") or die(mysqli_error($conn));
 
 			if ($register) {
 				echo "success";
 			}else{
 				echo 'error';
 			}
+		} else {
+			echo 'error';
 
 		}
 	}
